@@ -57,10 +57,12 @@ if "%userInput%" == "cls" (
 if "%userInput%" == "dir" (
     :listtestprojects
     for %%d in (!dirList!) do (
+        set "lastTestRunMsgVarName=lastTestRunMsg_!index!"
+        call set "lastTestRunMsgVal=%%!lastTestRunMsgVarName!%%"
         if !index! lss 10 (
-            echo !index!.  %%d
+            call echo !index!.  %%d !lastTestRunMsgVal!
         ) else (
-            echo !index!. %%d 
+            call echo !index!. %%d !lastTestRunMsgVal!
         )
         set /a index+=1
     )
@@ -70,10 +72,21 @@ if "%userInput%" == "dir" (
 for %%d in (!dirList!) do (
     if "%userInput%" == "!index!" (
         dotnet test %%d --nologo -v m
+        if !ERRORLEVEL! == 0 (
+            set "lastTestRunMsg_!index!=----Passed"
+        )  else (
+            set "lastTestRunMsg_!index!=----Failed"
+        )
+        
     ) else (
         echo %%d | findstr /I /C:"%userInput%" >nul
         if not errorlevel 1 (
               dotnet test %%d --nologo -v m
+        if !ERRORLEVEL! == 0 (
+                  set "lastTestRunMsg_!index!=----Passed"
+              )  else (
+                  set "lastTestRunMsg_!index!=----Failed"
+              )
         )
     )
     set /a index+=1
