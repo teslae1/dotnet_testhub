@@ -5,7 +5,7 @@ set "dirList="
 set "currentDir=%cd%"
 
 set "index=1"
-ECHO ----DOTNET_TESTHUB----
+ECHO ----DOTNET_CLIHUB----
 for /r "%cd%" %%d in (.) do (
     if exist "%%d\*test*.csproj" (
         set "relativeDir=%%d"
@@ -38,6 +38,7 @@ if "%userInput%" == "?" (
     echo mytest runs dotnet test on the first project matching on string contains 
     echo cls    clears screen and lists the detected test projects
     echo dir    lists the detected test projects
+    echo b      runs a silent version of dotnet build in the current directory - only printing errors
     echo q      exits
     echo exit   exits
     echo ?      prints this help menu 
@@ -52,6 +53,10 @@ if "%userInput%" == "exit" (
 if "%userInput%" == "cls" (
     cls
     goto listtestprojects
+)
+
+if "%userInput%" == "b" (
+    dotnet build --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly
 )
 
 if "%userInput%" == "dir" (
