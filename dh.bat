@@ -76,7 +76,7 @@ if "%userInput%" == "dir" (
 
 for %%d in (!dirList!) do (
     if "%userInput%" == "!index!" (
-        dotnet test %%d --nologo -v m
+        dotnet test %%d --nologo -v q /clp:ErrorsOnly
         if !ERRORLEVEL! == 0 (
             set "lastTestRunMsg_!index!=----Passed"
         )  else (
@@ -86,7 +86,7 @@ for %%d in (!dirList!) do (
     ) else (
         echo %%d | findstr /I /C:"%userInput%" >nul
         if not errorlevel 1 (
-              dotnet test %%d --nologo -v m
+              dotnet test %%d --nologo -v q /clp:ErrorsOnly
         if !ERRORLEVEL! == 0 (
                   set "lastTestRunMsg_!index!=----Passed"
               )  else (
