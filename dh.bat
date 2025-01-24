@@ -57,6 +57,7 @@ if "%userInput%" == "cls" (
 
 if "%userInput%" == "b" (
     dotnet build --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly
+    goto loop
 )
 
 if "%userInput%" == "dir" (
