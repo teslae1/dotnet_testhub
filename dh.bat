@@ -39,6 +39,7 @@ if "%userInput%" == "?" (
     echo cls    clears screen and lists the detected test projects
     echo dir    lists the detected test projects
     echo b      runs a silent version of dotnet build in the current directory - only printing errors
+    echo r      executes dotnet run and exits 
     echo q      exits
     echo exit   exits
     echo ?      prints this help menu 
@@ -58,6 +59,9 @@ if "%userInput%" == "cls" (
 if "%userInput%" == "b" (
     dotnet build --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly
     goto loop
+)
+if "%userInput%" == "r" (
+    goto exitloop
 )
 
 if "%userInput%" == "dir" (
@@ -101,4 +105,12 @@ for %%d in (!dirList!) do (
 goto loop
 
 :exitloop
+
+REM The dotnet run needs to be executed here in order to have minimum amount of ctrl+c (interrupt) presses 
+if "%userInput%" == "r" (
+    dotnet run || CALL IF EnsureError
+)
+
 endlocal
+
+
