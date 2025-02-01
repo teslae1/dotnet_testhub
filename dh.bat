@@ -118,7 +118,12 @@ goto loop
 :HasCsprojFileWithTestFrameworkReferences
     set "directory=%~1"
     set "found=0"
-
+ 
+    if not exist "%directory%" (
+        echo Directory does not exist.
+        set "result=0"
+        goto :eof
+    )
     for %%f in ("%directory%\*.csproj") do (
         findstr /i /l "xunit nunit mstest" "%%f" > nul
         if !errorlevel! == 0 (
