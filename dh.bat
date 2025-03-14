@@ -7,24 +7,22 @@ set "currentDir=%cd%"
 set "index=1"
 ECHO ----DOTNET_CLIHUB----
 for /r "%cd%" %%d in (.) do (
-    if exist "%%d\**.csproj" (
-    call :HasCsprojFileWithTestFrameworkReferences "%%d"
-        if "!result!" == "1" (
-            set "relativeDir=%%d"
-            set "relativeDir=!relativeDir:%currentDir%=!"
-            REM set "relativeDir=!relativeDir:\=!"
-            set "relativeDir=!relativeDir:~1!"
-            set "relativeDir=!relativeDir:~0,-2!"
-            if !index! lss 10 (
-                echo !index!.  !relativeDir!
-            ) else (
-                echo !index!. !relativeDir!
-            )
-            set "dirList=!dirList! !relativeDir!"
-            set /a index+=1
+    if exist "%%d\*test*.csproj" (
+        set "relativeDir=%%d"
+        set "relativeDir=!relativeDir:%currentDir%=!"
+        REM set "relativeDir=!relativeDir:\=!"
+        set "relativeDir=!relativeDir:~1!"
+        set "relativeDir=!relativeDir:~0,-2!"
+        if !index! lss 10 (
+            echo !index!.  !relativeDir!
+        ) else (
+            echo !index!. !relativeDir!
         )
+        set "dirList=!dirList! !relativeDir!"
+        set /a index+=1
     )
 )
+
 :loop
 
 set /p userInput="  >> "
@@ -114,25 +112,6 @@ for %%d in (!dirList!) do (
 goto loop
 
 :exitloop
-
-:HasCsprojFileWithTestFrameworkReferences
-    set "directory=%~1"
-    set "found=0"
- 
-    if not exist "%directory%" (
-        echo Directory does not exist.
-        set "result=0"
-        goto :eof
-    )
-    for %%f in ("%directory%\*.csproj") do (
-        findstr /i /l "xunit nunit mstest" "%%f" > nul
-        if !errorlevel! == 0 (
-            set result=1
-            goto :eof
-        )
-    )
-    set "result=0"
-    goto :eof
 
 REM The dotnet run needs to be executed here in order to have minimum amount of ctrl+c (interrupt) presses 
 if "%userInput%" == "r" (
