@@ -40,6 +40,7 @@ if "%userInput%" == "?" (
     echo dir    lists the detected test projects
     echo b      runs a silent version of dotnet build in the current directory - only printing errors
     echo r      executes dotnet run and exits 
+	echo s      executes the first .sln file found in current dir or immediate child dirs
     echo q      exits
     echo exit   exits
     echo ?      prints this help menu 
@@ -61,6 +62,23 @@ if "%userInput%" == "b" (
     goto loop
 )
 if "%userInput%" == "r" (
+    goto exitloop
+)
+
+if "%userInput%" == "s" (
+    REM Search for .sln file in current directory
+    for %%f in ("%currentDir%\*.sln") do (
+        start "" "%%f"
+        goto exitloop
+    )
+    REM Search for .sln file in immediate subdirectories
+    for /d %%d in ("%currentDir%\*") do (
+        for %%f in ("%%d\*.sln") do (
+            start "" "%%f"
+            goto exitloop
+        )
+    )
+    echo no .sln file found in current dir or immediate sub dirs
     goto exitloop
 )
 
