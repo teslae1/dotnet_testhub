@@ -5,5 +5,5 @@ Launch the shell using the .bat script which allows
 - Run single letter command to execute common dotnet commands such at test, run all tests and silent build 
 
 Provides an overview much like visual studio gui for running and checking status of test suites
-[testhub vs visual studio](images/commandline_vs_visualstudio.png)
+![testhub vs visual studio](images/commandline_vs_visualstudio.png)
 
